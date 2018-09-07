@@ -2,32 +2,83 @@ package com.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.game.helper.Assets;
+import com.game.screen.MainScreen;
+import com.game.screen.SizableScreen;
 
-public class ShinxDefends extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+public class ShinxDefends extends ApplicationAdapter
+{
+    public static MainScreen MAIN_SCREEN;
+    
+    private SizableScreen screen;
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+    @Override
+    public void create()
+    {
+	Assets.load();
+	MAIN_SCREEN = new MainScreen();
+	setScreen(MAIN_SCREEN);
+    }
+
+    @Override
+    public void dispose()
+    {
+	if (screen != null)
+	    screen.hide();
+	// AssetLoader.dispose();
+    }
+
+    @Override
+    public void pause()
+    {
+	if (screen != null)
+	    screen.pause();
+    }
+
+    @Override
+    public void resume()
+    {
+	if (screen != null)
+	    screen.resume();
+    }
+
+    @Override
+    public void render()
+    {
+	if (screen != null)
+	    screen.render(Gdx.graphics.getDeltaTime());
+    }
+
+    @Override
+    public void resize(int width, int height)
+    {
+	if (screen != null)
+	    screen.resize(width, height);
+    }
+
+    /**
+     * Sets the current screen. {@link Screen#hide()} is called on any old
+     * screen, and {@link Screen#show()} is called on the new screen, if any.
+     * 
+     * @param screen
+     *            may be {@code null}
+     */
+    public void setScreen(SizableScreen screen)
+    {
+	if (this.screen != null)
+	    this.screen.hide();
+	this.screen = screen;
+	if (this.screen != null)
+	{
+	    this.screen.show();
+	    this.screen.resize();
+
 	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-	}
+    }
+
+    /** @return the currently active {@link Screen}. */
+    public SizableScreen getScreen()
+    {
+	return screen;
+    }
 }

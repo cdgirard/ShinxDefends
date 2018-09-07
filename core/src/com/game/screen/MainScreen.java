@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.game.helper.Assets;
+import com.game.screen.input.MainScreenInputAdapter;
 
 public class MainScreen extends SizableScreen
 {
@@ -47,6 +48,8 @@ public class MainScreen extends SizableScreen
     private ImageButton m_startNewGameButton, m_loadGameButton;
 
     private Texture m_background;
+    
+    private MainScreenInputAdapter inputProcessor;
 
     // TODO: Needs a better name.
     private Skin skinLibgdx = new Skin(Gdx.files.internal("ui/clean-crispy-ui.json"));
@@ -240,15 +243,17 @@ public class MainScreen extends SizableScreen
 	InputMultiplexer inputMultiplexer = new InputMultiplexer();
 	//  inputMultiplexer.addProcessor(inputProcessorOne);
 	inputMultiplexer.addProcessor(inputProcessorTwo);
+	inputProcessor = new MainScreenInputAdapter(this);
+	inputMultiplexer.addProcessor(inputProcessor);
 	Gdx.input.setInputProcessor(inputMultiplexer);
-	Gdx.app.log("MainScreen", "show called");
+	Gdx.app.log("GameScreen", "show called");
     }
 
     @Override
     public void hide()
     {
 	Gdx.input.setInputProcessor(null);
-	Gdx.app.log("MainScreen", "hide called");
+	Gdx.app.log("GameScreen", "hide called");
     }
 
     @Override

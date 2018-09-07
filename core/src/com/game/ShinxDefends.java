@@ -3,20 +3,26 @@ package com.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.game.helper.Assets;
+import com.game.screen.GameScreen;
 import com.game.screen.MainScreen;
 import com.game.screen.SizableScreen;
 
 public class ShinxDefends extends ApplicationAdapter
 {
     public static MainScreen MAIN_SCREEN;
+    public static GameScreen GAME_SCREEN;
+    
+    public static ShinxDefends m_shinxDefends;
     
     private SizableScreen screen;
 
     @Override
     public void create()
     {
+	m_shinxDefends = this;
 	Assets.load();
 	MAIN_SCREEN = new MainScreen();
+	GAME_SCREEN = new GameScreen();
 	setScreen(MAIN_SCREEN);
     }
 

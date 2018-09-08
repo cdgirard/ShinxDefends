@@ -4,6 +4,7 @@ package com.game.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -29,6 +30,7 @@ public class Assets
     // Sounds                                         
     
     // Music
+    public static final String INTRO_MUSIC = "music/jd_nighthawk.mp3";
     
     public static AssetManager assetManager = new AssetManager();
     
@@ -81,6 +83,7 @@ public class Assets
     
     private static void loadMusic()
     {
+	assetManager.load(INTRO_MUSIC, Music.class);
 	assetManager.finishLoading();
     }
     

@@ -1,10 +1,13 @@
 package com.game.screen.input;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.game.ShinxDefends;
+import com.game.helper.Assets;
+import com.game.helper.AudioManager;
 import com.game.screen.MainScreen;
 
 public class MainScreenInputAdapter extends InputAdapter implements Disposable
@@ -36,6 +39,7 @@ public class MainScreenInputAdapter extends InputAdapter implements Disposable
 	Rectangle newGameButton = new Rectangle(129,597,462,698);
 	if (newGameButton.contains(screenX, screenY))
 	{
+	    AudioManager.instance.play(Assets.assetManager.get(Assets.INTRO_MUSIC, Music.class));
 	    ShinxDefends.GAME_SCREEN.init();
             ShinxDefends.m_shinxDefends.setScreen(ShinxDefends.GAME_SCREEN);
 	}

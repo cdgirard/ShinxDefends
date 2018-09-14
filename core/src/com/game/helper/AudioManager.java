@@ -69,5 +69,14 @@ public class AudioManager
 			playingMusic.pause();
 		}
 	}
+	
+	public float getPlaceInMusic()
+	{
+	    if (playingMusic != null)
+	    {
+		return playingMusic.getPosition();
+	    }
+	    return 0;
+	}
 
 }

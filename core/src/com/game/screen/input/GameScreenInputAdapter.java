@@ -37,7 +37,6 @@ public class GameScreenInputAdapter extends InputAdapter implements Disposable
     {
 	
 	float place = AudioManager.instance.getPlaceInMusic();
-	System.out.println(place);
 	return false;
     }
 

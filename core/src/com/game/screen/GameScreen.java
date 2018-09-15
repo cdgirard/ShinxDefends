@@ -39,13 +39,131 @@ import com.game.screen.input.GameScreenInputAdapter;
 public class GameScreen extends SizableScreen
 {
     RayHandler rayHandler;
-    Light woodBeatLight, pianoBeatLight;
+    Light woodBeatLight, pianoBeatLight, randomBeatLight;
     World world;
     
     float[] woodBeats = {0.82f, 2.42f, 4.02f, 5.62f, 7.2f, 8.82f, 10.42f, 12.02f, 30f};
-    float[] pianoBeats = {0.29f, 2.42f, 3.23f, 6.43f, 30f};
+    float[] pianoBeats = {0.29f, 2.42f, 3.23f, 6.43f, 9.67f, 12.8f, 30f};
+    double[] randomBeats = { 15.530023,
+	    15.620476,
+	    15.823061,
+	    16.003719,
+	    16.219795,
+	    16.329842,
+	    16.419954,
+	    16.621881,
+	    16.797415,
+	    16.930363,
+	    17.020046,
+	    17.221270,
+	    17.424740,
+	    17.530001,
+	    17.616690,
+	    17.826962,
+	    18.019773,
+	    18.130772,
+	    18.225578,
+	    18.398050,
+	    18.730816,
+	    18.820408,
+	    19.027029,
+	    19.200726,
+	    19.620226,
+	    19.820431,
+	    19.998888,
+	    20.420385,
+	    20.624649,
+	    20.731586,
+	    20.810453,
+	    21.220226,
+	    21.330929,
+	    21.423855,
+	    21.596758,
+	    21.929615,
+	    22.017845,
+	    22.227280,
+	    22.404581,
+	    24.026598,
+	    24.225555,
+	    24.326780,
+	    24.429138,
+	    24.627573,
+	    24.695465,
+	    24.761837,
+	    24.830681,
+	    24.929501,
+	    25.030636,
+	    25.231405,
+	    25.663969,
+	    26.225216,
+	    26.420296,
+	    26.458754,
+	    26.824127,
+	    27.123741,
+	    27.220976,
+	    27.425850,
+	    27.624376,
+	    27.726349,
+	    28.020613,
+	    28.056849,
+	    28.325352,
+	    28.425056,
+	    28.626326,
+	    28.821020,
+	    28.923151,
+	    29.125669,
+	    29.225828,
+	    29.424286,
+	    29.620430,
+	    29.657824,
+	    30.025715,
+	    30.326599,
+	    30.420771,
+	    30.521950,
+	    30.626348,
+	    30.825602,
+	    30.926508,
+	    31.220749,
+	    31.259546,
+	    31.525873,
+	    31.826530,
+	    32.021202,
+	    32.121861,
+	    32.326099,
+	    32.424919,
+	    32.625465,
+	    32.820454,
+	    32.856689,
+	    33.225849,
+	    33.525738,
+	    33.620861,
+	    33.723175,
+	    33.824104,
+	    34.024261,
+	    34.125420,
+	    34.420227,
+	    34.458595,
+	    34.724377,
+	    35.026756,
+	    35.221066,
+	    35.322742,
+	    35.524967,
+	    35.625874,
+	    35.826328,
+	    36.020432,
+	    36.059162,
+	    36.424740,
+	    36.726124,
+	    36.820908,
+	    36.922153,
+	    37.025215,
+	    37.224083,
+	    37.324715,
+	    37.620430,
+	    37.657120};
     int placeWood = 0;
     int placePiano = 0;
+    int placeRandom = 0;
     
     public boolean m_paused = false;
     public boolean m_endGame = false;
@@ -62,8 +180,6 @@ public class GameScreen extends SizableScreen
     public GameScreenController controller;
     
     private GameScreenInputAdapter inputProcessor;
-
-    float timePassed = 0;
 
     public GameScreen()
     {
@@ -98,7 +214,7 @@ public class GameScreen extends SizableScreen
 	
 	woodBeatLight = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 400f, 400f);
 	pianoBeatLight = new PointLight(rayHandler, 100, Color.PURPLE, 0f, 600f, 400f);
-	
+	randomBeatLight = new PointLight(rayHandler, 100, Color.RED, 0f, 200f, 400f);
 	initUI();
     }
 
@@ -121,19 +237,17 @@ public class GameScreen extends SizableScreen
     public void update(float delta)
     {
 	float placeInMusic = AudioManager.instance.getPlaceInMusic();
-	timePassed += delta;
-	if (timePassed > woodBeats[placeWood]) 
+	if (placeInMusic > woodBeats[placeWood]) 
 	{
 	    woodBeatLight.setDistance(100f);
 	    placeWood++;
-	    //System.out.println("W: "+placeInMusic+" : "+timePassed);
 	}
 	else 
 	{
 	    woodBeatLight.setDistance(woodBeatLight.getDistance()*0.97f);
 	}
 	
-	if (timePassed > pianoBeats[placePiano])
+	if (placeInMusic > pianoBeats[placePiano])
 	{
 	    pianoBeatLight.setDistance(100f);
 	    placePiano++;
@@ -141,7 +255,18 @@ public class GameScreen extends SizableScreen
 	}
 	else 
 	{
-	    pianoBeatLight.setDistance(pianoBeatLight.getDistance()*0.5f);
+	    pianoBeatLight.setDistance(pianoBeatLight.getDistance()*0.95f);
+	}
+	
+	if (placeInMusic > randomBeats[placeRandom])
+	{
+	    randomBeatLight.setDistance(100f);
+	    placeRandom++;
+	    //System.out.println("P: "+placeInMusic);
+	}
+	else 
+	{
+	    randomBeatLight.setDistance(randomBeatLight.getDistance()*0.5f);
 	}
 
     }

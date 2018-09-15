@@ -30,7 +30,7 @@ public class Assets
     // Sounds                                         
     
     // Music
-    public static final String INTRO_MUSIC = "music/jd_nighthawk.mp3";
+    public static final String INTRO_MUSIC = "music/chime_phototropic.wav";
     
     public static AssetManager assetManager = new AssetManager();
     

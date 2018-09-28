@@ -39,7 +39,7 @@ public class MainScreenInputAdapter extends InputAdapter implements Disposable
 	Rectangle newGameButton = new Rectangle(129,597,462,698);
 	if (newGameButton.contains(screenX, screenY))
 	{
-	    AudioManager.instance.play(Assets.assetManager.get(Assets.INTRO_MUSIC, Music.class));
+	    AudioManager.instance.play(Assets.assetManager.get(Assets.CHIME_SONG, Music.class));
 	    ShinxDefends.GAME_SCREEN.init();
             ShinxDefends.m_shinxDefends.setScreen(ShinxDefends.GAME_SCREEN);
 	}

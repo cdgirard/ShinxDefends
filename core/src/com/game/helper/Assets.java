@@ -1,12 +1,11 @@
 package com.game.helper;
 
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.game.obj.SongData;
 
 public class Assets
 {
@@ -14,11 +13,8 @@ public class Assets
     public static final String MAIN_SCREEN = "images/backgrounds/menu_screen.jpg";
     public static final String GAME_SCREEN = "images/backgrounds/game_screen.png";
 
-
-    
     // Attackers
 
-    
     // Dragons
     
     // Landscape
@@ -30,9 +26,11 @@ public class Assets
     // Sounds                                         
     
     // Music
-    public static final String INTRO_MUSIC = "music/chime_phototropic.wav";
+    public static final String CHIME_SONG = "music/chime_phototropic.wav";
+    public static final String CHIME_DATA = "game_data/songData.dat";
     
     public static AssetManager assetManager = new AssetManager();
+    public static SongData songData;
     
 
     public static void load()
@@ -83,8 +81,10 @@ public class Assets
     
     private static void loadMusic()
     {
-	assetManager.load(INTRO_MUSIC, Music.class);
+	assetManager.load(CHIME_SONG, Music.class);
 	assetManager.finishLoading();
+	
+	songData = SongDataFileLoader.loadWorld(CHIME_DATA);
     }
     
     

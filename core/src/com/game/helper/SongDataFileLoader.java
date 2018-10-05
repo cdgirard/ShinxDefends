@@ -54,7 +54,7 @@ public class SongDataFileLoader
             Json json = new Json();
             JsonWorld jWorld = json.fromJson(JsonWorld.class, load);
 
-            myData = new SongData(jWorld.song, jWorld.onset, jWorld.types);                
+            myData = new SongData(jWorld.song, jWorld.onset, jWorld.types, jWorld.runs);                
         }
         return myData;
 

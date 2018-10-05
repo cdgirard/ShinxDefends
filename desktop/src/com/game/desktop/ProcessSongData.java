@@ -118,7 +118,7 @@ public class ProcessSongData
 	int end = -1;
 	for (int x=1;x<types.length;x++)
 	{
-	    if ((lastType == types[x]) && (onset[x-1] + 0.25  > onset[x]))
+	    if ((lastType == types[x]) && (onset[x-1] + 0.4  > onset[x]))
 	    {
 		if (!run)
 		{

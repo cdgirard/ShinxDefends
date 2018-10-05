@@ -34,6 +34,8 @@ public class SongDataFileLoader
          * belong to the same group.
          */
         public int[] types;
+        
+        public int[][] runs;
     }
     
     /**

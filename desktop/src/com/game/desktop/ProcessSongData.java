@@ -109,9 +109,9 @@ public class ProcessSongData
      * @param onset
      * @param types
      */
-    public static ArrayList<int[]> findRuns(double[] onset, int[] types)
+    public static ArrayList<double[]> findRuns(double[] onset, int[] types)
     {
-	ArrayList<int[]> data = new ArrayList<int[]>();
+	ArrayList<double[]> data = new ArrayList<double[]>();
 	int lastType = types[0];
 	boolean run = false;
 	int start = -1;
@@ -129,8 +129,19 @@ public class ProcessSongData
 	    else if (run)
 	    {	
 		end = x-1;
-		int[] runData = {start, end, types[x-1]};
+		double[] runData = new double[end - start + 2];
+		for (int y=0;y<runData.length-1;y++)
+		{
+		    runData[y] = onset[start+y];
+		}
+		runData[runData.length-1] = types[x-1];
 		data.add(runData);
+		
+		for (int y=start; y<=end;y++)
+		    {
+			onset[y] = -1;
+			types[y] = -1;
+		    }
 		end = -1;
 		start = -1;
 		run = false;
@@ -140,25 +151,13 @@ public class ProcessSongData
 	return data;
     }
     
-    public static void trimRuns(double[] onset, int[] types, ArrayList<int[]> runData)
-    {
-	for (int[] run : runData)
-	{
-	    for (int x=run[0]; x<=run[1];x++)
-	    {
-		onset[x] = -1;
-		types[x] = -1;
-	    }
-	}
-    }
-    
     /**
      * Create the JSON file for the game.
      * @param onset
      * @param types
      * @throws FileNotFoundException
      */
-    public static void exportData(double[] onset, int[] types, ArrayList<int[]> runData) throws FileNotFoundException
+    public static void exportData(double[] onset, int[] types, ArrayList<double[]> runData) throws FileNotFoundException
     {
 	File file = new File(EXPORT_PATH+"/"+EXPORT_FILE);
 	PrintWriter pw = new PrintWriter(file);
@@ -181,9 +180,14 @@ public class ProcessSongData
 	pw.print(types[types.length-1]+" ],\n");
 	
 	pw.print("runs: [\n");
-	for (int[] run: runData)
+	for (double[] run: runData)
 	{
-	    pw.print("[ "+run[0]+", "+run[1]+", "+run[2]+" ]\n");
+	    pw.print("[ ");
+	    for (int x=0;x<run.length-1;x++)
+	    {
+		pw.print(run[x]+", ");
+	    }
+	    pw.print(run[run.length-1]+" ]\n");
 	}
 	pw.print(" ]\n");
 	
@@ -205,9 +209,7 @@ public class ProcessSongData
 	    
 	    int[] typeData = setTypes(pitchAtOnsetData);
 	    
-	    ArrayList<int[]> runData = findRuns(onsetData,typeData);
-	    
-            trimRuns(onsetData, typeData, runData);
+	    ArrayList<double[]> runData = findRuns(onsetData,typeData);
 	    
 	    exportData(onsetData,typeData,runData);
 	    

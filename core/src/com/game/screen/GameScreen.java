@@ -41,6 +41,8 @@ public class GameScreen extends SizableScreen
 {
     RayHandler rayHandler;
     Light beatLights[] = new Light[10];
+    Light runLights[] = new Light[10];
+    int run, placeInRun;
     World world;
     
     //float[] woodBeats = {0.82f, 2.42f, 4.02f, 5.62f, 7.2f, 8.82f, 10.42f, 12.02f, 30f};
@@ -105,6 +107,19 @@ public class GameScreen extends SizableScreen
 	beatLights[7] = new PointLight(rayHandler, 100, Color.FIREBRICK, 0f, 300f, 400f);
 	beatLights[8] = new PointLight(rayHandler, 100, Color.GOLDENROD, 0f, 400f, 400f);
 	beatLights[9] = new PointLight(rayHandler, 100, Color.MAROON, 0f, 500f, 400f);
+	
+	runLights[0] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 100f, 500f);
+	runLights[1] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 150f, 500f);
+	runLights[2] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 200f, 500f);
+	runLights[3] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 250f, 500f);
+	runLights[4] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 300f, 500f);
+	runLights[5] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 350f, 500f);
+	runLights[6] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 400f, 500f);
+	runLights[7] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 450f, 500f);
+	runLights[8] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 500f, 500f);
+	runLights[9] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 550f, 500f);
+	run = 0;
+	placeInRun = 0;
 	initUI();
     }
 
@@ -143,6 +158,25 @@ public class GameScreen extends SizableScreen
 	    {
 	        if (beatLights[light].getDistance() > 1)
 	            beatLights[light].setDistance(beatLights[light].getDistance()*0.95f);
+	    }
+	}
+	
+	if (placeInMusic > data.runs[run][placeInRun])
+	{
+	    runLights[placeInRun].setDistance(100f);
+	    placeInRun++;
+	    if ((placeInRun == 10) || (placeInRun == data.runs[run].length))
+	    {
+		placeInRun = 0;
+		run++;
+	    }
+	}
+	else
+	{
+	    for (int light=0;light<runLights.length;light++)
+	    {
+	        if (runLights[light].getDistance() > 1)
+	            runLights[light].setDistance(runLights[light].getDistance()*0.95f);
 	    }
 	}
 

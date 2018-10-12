@@ -35,7 +35,7 @@ public class SongDataFileLoader
          */
         public int[] types;
         
-        public int[][] runs;
+        public float[][] runs;
     }
     
     /**

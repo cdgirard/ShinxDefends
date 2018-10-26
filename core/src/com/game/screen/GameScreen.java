@@ -168,23 +168,29 @@ public class GameScreen extends SizableScreen
 	float placeInMusic = AudioManager.instance.getPlaceInMusic();
 	SongData data = Assets.songData;
 	
-	int loc = nextBeatOfType(1);
-	// TODO: Need to figure out how to advance placeOnset.
-	
 	if (data.onset[placeOnset] < placeInMusic)
-	    placeOnset++;
-
-	if (loc != -1)
+	        placeOnset++;
+	
+	// TODO: Need to look for loc of other beat types.
+	int MAX_TYPES = 10;
+	for (int type=1;type<MAX_TYPES;type++)
 	{
-	    if (!data.beat[loc])
+	    int loc = nextBeatOfType(type);
+	
+	    if (loc != -1)
 	    {
-		Beat b = new Beat(rayHandler, placeInMusic, data.onset[loc]);
+	    // This makes sure there is only one beat of each "type"
+	    // Going, by making sure that loc already has a beat going.
+	        if (!data.beat[loc])
+	        {
+		    Beat b = new Beat(rayHandler, placeInMusic, data.onset[loc],type);
 		
-		if (b != null)
-		{
-		    beats.add(b);
-		    data.beat[loc] = true;
-		}
+		    if (b != null)
+		    {
+		        beats.add(b);
+		        data.beat[loc] = true;
+		    }
+	        }
 	    }
 	}
 	

@@ -15,8 +15,17 @@ import box2dLight.RayHandler;
  */
 public class Beat
 {
+    Color[] colors = {Color.PURPLE, Color.YELLOW, Color.RED, Color.BLUE, Color.GREEN, 
+	    Color.BROWN, Color.FIREBRICK, Color.GOLDENROD, Color.MAROON, Color.FOREST};
+    
+    
     private Light approachLight;
     private Light beatLight;
+    
+    /**
+     * Beat type, not sure if keeping this here yet.
+     */
+    private int type;
     /**
      * When we started tracking the beat.
      */
@@ -39,13 +48,14 @@ public class Beat
      * @param s
      * @param e
      */
-    public Beat(RayHandler rayHandler, float s, float e)
+    public Beat(RayHandler rayHandler, float s, float e, int t)
     {
 	start = s;
 	end = e;
-
+        type = t;
+        // TODO: Needs a set start point for each type and end point.
 	approachLight = new PointLight(rayHandler, 100, Color.WHITE, 0f, 300f, 460f);
-	beatLight = new PointLight(rayHandler, 100, Color.PURPLE, 0f, 440f, 460f);
+	beatLight = new PointLight(rayHandler, 100, colors[type], 0f, 440f, 460f);
     }
     
     public void update(float deltaTime)

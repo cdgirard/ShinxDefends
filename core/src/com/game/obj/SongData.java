@@ -7,6 +7,7 @@ public class SongData
     public int[] types;
     public float[][] runs;
     public int[] runTypes;
+    public boolean[] beat;
     
     public SongData(String n, float[] o, int[] t, float[][] r)
     {
@@ -30,6 +31,12 @@ public class SongData
 		runs[x][y] = r[x][y];
 	    }
 	    runTypes[x] = (int)r[x][r[x].length-1];
+	}
+	
+	beat = new boolean[o.length];
+	for (int x=0;x<beat.length;x++)
+	{
+	    beat[x] = false;
 	}
     }
 

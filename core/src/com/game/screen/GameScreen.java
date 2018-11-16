@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.Array;
 import com.game.ShinxDefends;
 import com.game.helper.Assets;
 import com.game.helper.AudioManager;
+import com.game.obj.Beat;
 import com.game.obj.SongData;
 import com.game.screen.input.GameScreenInputAdapter;
 
@@ -40,10 +41,13 @@ import com.game.screen.input.GameScreenInputAdapter;
 public class GameScreen extends SizableScreen
 {
     RayHandler rayHandler;
+    Light approachLight;
     Light beatLights[] = new Light[10];
     Light runLights[] = new Light[10];
-    int run, placeInRun;
+    int run, placeInRun, lastBeat = 0;
     World world;
+    
+    Array<Beat> beats = new Array<Beat>();
     
     //float[] woodBeats = {0.82f, 2.42f, 4.02f, 5.62f, 7.2f, 8.82f, 10.42f, 12.02f, 30f};
     //float[] pianoBeats = {0.29f, 2.42f, 3.23f, 6.43f, 9.67f, 12.8f, 30f};
@@ -97,8 +101,10 @@ public class GameScreen extends SizableScreen
 	rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.5f);
 	rayHandler.setBlurNum(3);
 	
+	approachLight = new PointLight(rayHandler, 100, Color.WHITE, 0f, 300f, 460f);
+	
 	beatLights[0] = new PointLight(rayHandler, 100, Color.YELLOW, 0f, 100f, 200f);
-	beatLights[1] = new PointLight(rayHandler, 100, Color.PURPLE, 0f, 200f, 200f);
+	beatLights[1] = new PointLight(rayHandler, 100, Color.PURPLE, 0f, 440f, 460f);
 	beatLights[2] = new PointLight(rayHandler, 100, Color.RED, 0f, 300f, 200f);
 	beatLights[3] = new PointLight(rayHandler, 100, Color.BLUE, 0f, 400f, 200f);
 	beatLights[4] = new PointLight(rayHandler, 100, Color.WHITE, 0f, 500f, 200f);
@@ -139,6 +145,20 @@ public class GameScreen extends SizableScreen
 	
     }
 
+    private int nextBeatOfType(int type)
+    {
+	int loc = placeOnset;
+	SongData data = Assets.songData;
+	
+	while (loc < data.types.length)
+	{
+	    if (data.types[loc]%10 == type)
+		return loc;
+	    loc++;
+	}
+	return -1;
+    }
+    
     /**
      * Updates the state of the game, presently working off the music beats.
      * @param delta
@@ -147,19 +167,70 @@ public class GameScreen extends SizableScreen
     {
 	float placeInMusic = AudioManager.instance.getPlaceInMusic();
 	SongData data = Assets.songData;
-	if (placeInMusic > data.onset[placeOnset]) 
+	
+	if (data.onset[placeOnset] < placeInMusic)
+	        placeOnset++;
+	
+	// TODO: Need to look for loc of other beat types.
+	int MAX_TYPES = 10;
+	for (int type=1;type<MAX_TYPES;type++)
 	{
-	    beatLights[data.types[placeOnset]%10].setDistance(100f);
-	    placeOnset++;
-	}
-	else 
-	{
-	    for (int light=0;light<beatLights.length;light++)
+	    int loc = nextBeatOfType(type);
+	
+	    if (loc != -1)
 	    {
-	        if (beatLights[light].getDistance() > 1)
-	            beatLights[light].setDistance(beatLights[light].getDistance()*0.95f);
+	    // This makes sure there is only one beat of each "type"
+	    // Going, by making sure that loc already has a beat going.
+	        if (!data.beat[loc])
+	        {
+		    Beat b = new Beat(rayHandler, placeInMusic, data.onset[loc],type);
+		
+		    if (b != null)
+		    {
+		        beats.add(b);
+		        data.beat[loc] = true;
+		    }
+	        }
 	    }
 	}
+	
+	Array<Beat> removeList = new Array<Beat>();
+	for (Beat b : beats)
+	{
+	    b.update(delta);
+	    if (b.finished)
+	    {
+		removeList.add(b);
+	    }
+	}
+	
+	for (Beat b : removeList)
+	{
+	    int index = beats.indexOf(b, true);
+	    if (index != -1)
+	    {
+		b.dispose();
+		beats.removeIndex(index);
+	    }
+	}
+	if (removeList.size > 0)
+	    removeList.removeRange(0, removeList.size-1);
+	
+	
+	
+//	if (placeInMusic > data.onset[placeOnset]) 
+//	{
+//	    beatLights[data.types[placeOnset]%10].setDistance(100f);
+//	    placeOnset++;
+//	}
+//	else 
+//	{
+//	    for (int light=0;light<beatLights.length;light++)
+//	    {
+//	        if (beatLights[light].getDistance() > 1)
+//	            beatLights[light].setDistance(beatLights[light].getDistance()*0.95f);
+//	    }
+//	}
 	
 	if (placeInMusic > data.runs[run][placeInRun])
 	{
